@@ -8,6 +8,7 @@ import com.example.demo.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,42 +19,78 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepo repo;
 
-
-    public Long save(BookSaveDto dto) throws Exception {
-        Book book = new Book();
-        book.setBookName(dto.getBookName());
-        book.setPublishedDate(dto.getPublishedDate());
-        book = repo.save(book);
-        if (book.getBookName() == null) throw new Exception("Проверка транзакции");
-        return book.getId();
+    public Long save(BookSaveDto dto) throws NullPointerException {
+        if (dto.getId() == null) {
+            Book book = new Book();
+            book.setBookName(dto.getBookName());
+            book.setPublishedDate(dto.getPublishedDate());
+            book = repo.save(book);
+            return book.getId();
+        } else {
+            return update(dto);
+        }
     }
 
+    private Long update(BookSaveDto dto) throws NullPointerException {
+        Optional<Book> optionalBook = repo.findById(dto.getId());
+
+        if (optionalBook.isPresent()) {
+            Book book = optionalBook.get();
+            book.setPublishedDate(dto.getPublishedDate());
+            book.setBookName(dto.getBookName());
+            return repo.save(book).getId();
+
+        } else throw new NullPointerException(String.format("Книга с id %s не найдена", dto.getId()));
+    }
 
     public String delete(Long id) {
-        repo.deleteById(id);
+        Optional<Book> optionalBook = repo.findById(id);
+
+        if (optionalBook.isPresent()) {
+            Book book = optionalBook.get();
+            book.setRemoveDate(new Date(System.currentTimeMillis()));
+            repo.save(book);
+
+        } else throw new NullPointerException(String.format("Книга с id %s не найдена", id));
         return "Deleted";
     }
 
-    public List<Book> findAll() {
-        return repo.findAll();
+
+    public BookResponseDto findById(Long id) {
+        Optional<Book> book = repo.findBookByRemoveDateIsNullAndId(id);
+
+        var dto = new BookResponseDto();
+        if (book.isPresent()) {
+            dto = new BookResponseDto(
+                    book.get().getId(),
+                    book.get().getBookName(),
+                    book.get().getPublishedDate()
+            );
+        } else throw new NullPointerException(String.format("Книга с id %s не найдена", id));
+        return dto;
+}
+
+    public List<BookResponseDto> findAll() {
+        var list = repo.findAllAndBOrderByRemoveDateIsNull();
+
+
+        List<BookResponseDto> dtoList = new ArrayList<>();
+
+        for (Book book : list) {
+            var dto = new BookResponseDto(
+                    book.getId(),
+                    book.getBookName(),
+                    book.getPublishedDate()
+            );
+            dtoList.add(dto);
+        }
+        return dtoList;
     }
 
     public List<Book> findAllAndOrderById() {
         return repo.findAllAndOrderById();
     }
 
-    public String update(Long id, BookSaveDto dto) {
-        Optional<Book> optionalBook = repo.findById(id);
-
-        if (optionalBook.isPresent()) {
-            Book book = optionalBook.get();
-            book.setPublishedDate(dto.getPublishedDate());
-            book.setBookName(dto.getBookName());
-            repo.save(book);
-
-            return "Запись с ID " + id + " успешно обновлена";
-        } else return "Запись с ID " + id + " не найдена";
-    }
 
     @Override
     public List<BookResponseDto> findByIdList(List<Long> idList) {
@@ -61,7 +98,7 @@ public class BookServiceImpl implements BookService {
 
         List<BookResponseDto> dtoList = new ArrayList<>();
 
-        for (Book book: books) {
+        for (Book book : books) {
             var dto = new BookResponseDto(
                     book.getId(),
                     book.getBookName(),

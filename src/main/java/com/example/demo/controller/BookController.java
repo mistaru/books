@@ -2,10 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.BookResponseDto;
 import com.example.demo.dto.BookSaveDto;
-import com.example.demo.entity.Book;
 import com.example.demo.service.BookService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,28 +16,40 @@ public class BookController {
     private final BookService service;
 
     @GetMapping("/all")
-    public List<Book> getAllBooks(){
+    public List<BookResponseDto> getAllBooks() {
         return service.findAll();
     }
 
-    @Transactional
     @PostMapping
-    public Long save(@RequestBody BookSaveDto dto) throws Exception {
-        return service.save(dto);
+    public Long save(@RequestBody BookSaveDto dto) {
+        try {
+            return service.save(dto);
+
+        } catch (NullPointerException exception) {
+            System.out.println(exception.getMessage());
+            return -1L;
+        }
     }
 
     @DeleteMapping
-    public String delete (@RequestParam Long id){
+    public String delete(@RequestParam Long id) {
         return service.delete(id);
     }
 
-    @PutMapping
-    public String update (@RequestParam Long id, @RequestBody BookSaveDto dto){
-        return service.update(id, dto);
+
+    @GetMapping("/{id}")
+    public BookResponseDto findById(@PathVariable Long id) {
+        try {
+        return service.findById(id);
+        } catch (NullPointerException exception) {
+            System.out.println(exception.getMessage());
+            return new BookResponseDto();
+        }
     }
 
     @GetMapping("/allByIds")
-    public List<BookResponseDto> findByIdList(@RequestParam List<Long> ids){
+    public List<BookResponseDto> findByIdList(@RequestParam List<Long> ids) {
         return service.findByIdList(ids);
     }
+
 }

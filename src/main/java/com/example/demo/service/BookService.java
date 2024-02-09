@@ -8,14 +8,13 @@ import java.util.List;
 
 public interface BookService {
 
-    Long save(BookSaveDto dto) throws Exception;
+    Long save(BookSaveDto dto) throws NullPointerException;
 
     String delete(Long id);
 
-    List<Book> findAll();
-
-    String update(Long id, BookSaveDto dto);
-
+    List<BookResponseDto> findAll();
 
     List<BookResponseDto> findByIdList(List<Long> idList);
+
+    BookResponseDto findById(Long id);
 }

@@ -17,6 +17,7 @@ public class Book {
     private Long id;
     private String bookName;
     private Date publishedDate;
+    private Date removeDate;
 
     @ManyToMany(mappedBy = "books", fetch = FetchType.LAZY)
     private Set<Author> authors = new HashSet<>();

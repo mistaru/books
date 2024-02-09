@@ -10,12 +10,16 @@ import org.springframework.stereotype.Repository;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BookRepo extends JpaRepository<Book, Long> {
     @Query(value = "SELECT * FROM Book ORDER BY id", nativeQuery = true)
     List<Book> findAllAndOrderById();
 
+    Optional<Book> findBookByRemoveDateIsNullAndId(Long id);
+
+    List<Book> findAllAndBOrderByRemoveDateIsNull();
     @Query("SELECT u FROM Book u WHERE u.bookName = ?1")
     Book findByBookName(String name);
 
