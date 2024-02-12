@@ -12,7 +12,7 @@ public interface BookService {
 
     String delete(Long id);
 
-    List<BookResponseDto> findAll();
+    List<BookResponseDto> findAll() throws Exception;
 
     List<BookResponseDto> findByIdList(List<Long> idList);
 

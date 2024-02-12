@@ -70,7 +70,8 @@ public class BookServiceImpl implements BookService {
         return dto;
 }
 
-    public List<BookResponseDto> findAll() {
+    public List<BookResponseDto> findAll() throws Exception {
+        if (true) throw new Exception("что то пошло не - так");
         var list = repo.findAllAndBOrderByRemoveDateIsNull();
 
 
