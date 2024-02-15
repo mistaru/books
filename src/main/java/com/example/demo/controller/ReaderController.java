@@ -4,17 +4,21 @@ import com.example.demo.entity.Readers;
 import com.example.demo.dto.ReaderResponseDto;
 import com.example.demo.dto.ReaderSaveDto;
 import com.example.demo.service.ReadersService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "ReaderController", description = "ReaderController")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/readers")
 public class ReaderController {
     private final ReadersService service;
 
+    @Operation(summary = "getAll")
     @GetMapping()
     public List<Readers> getAll(){
         return service.findAll();

@@ -6,11 +6,17 @@ import com.example.demo.dto.ResponseMessageAPI;
 import com.example.demo.enums.ResultCode;
 import com.example.demo.enums.ResultCodeAPI;
 import com.example.demo.service.BookService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Book", description = "Тут находятся все роуты связанные для работы с книгами")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/books")
@@ -18,6 +24,13 @@ public class BookController {
 
     private final BookService service;
 
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Все записи получены успешно",
+                    content = {@Content(mediaType = "application/json")})
+    })
+    @Operation(summary = "Этот роут возвращает весь список книг")
     @GetMapping("/all")
     public ResponseMessageAPI<List<BookResponseDto>> getAllBooks() {
         try {
