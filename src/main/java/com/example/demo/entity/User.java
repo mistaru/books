@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 
+import com.example.demo.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -19,6 +20,10 @@ public class User {
     private  String username;
     private  String password;
     private  String fullname;
+    private  String emailAddress;
+
+    @Enumerated(value = EnumType.STRING)
+    private UserStatus status;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
@@ -26,6 +31,6 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id")
-    private List<Role> comments = new ArrayList<>();
+    private List<Role> roles = new ArrayList<>();
 
 }

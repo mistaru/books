@@ -14,7 +14,7 @@ public class RefundReminderJob {
 
     BookReserveService service;
 
-    @Scheduled(fixedDelay = 15000)
+//    @Scheduled(fixedDelay = 15000)
     void refundReminder() {
         System.out.println("Job сработал!");
         List<BookReserve> bookReserveList = service.findByAfterReturnDate();
