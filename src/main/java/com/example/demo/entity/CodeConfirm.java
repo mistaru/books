@@ -18,5 +18,7 @@ public class CodeConfirm {
     private Long code;
     @Enumerated(value = EnumType.STRING)
     private CodeStatus status;
+    @ManyToOne()
+    private User user;
 
 }

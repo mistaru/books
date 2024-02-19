@@ -23,7 +23,6 @@ public class RegistrationController {
 
 	@PostMapping()
 	public Long registration(@RequestBody UserRegistrationDto model){
-
 		return userService.save(model);
 	}
 
@@ -55,33 +54,4 @@ public class RegistrationController {
 		return "Congratulations! Your mail has been send to the user.";
 	}
 
-	/**
-	 * 
-	 * @return
-	 * @throws MessagingException
-	 */
-	@RequestMapping("send-mail-attachment")
-	public String sendWithAttachment() throws MessagingException {
-
-		/*
-		 * Creating a User with the help of User class that we have declared. Setting
-		 * the First,Last and Email address of the sender.
-		 */
-		User user =  new User();
-
-		user.setFullname("Mukul");
-		user.setUsername("Jaiswal");
-		user.setEmailAddress("mistaru@bk.ru"); //Receiver's email address
-
-		/*
-		 * Here we will call sendEmailWithAttachment() for Sending mail to the sender
-		 * that contains a attachment.
-		 */
-		try {
-			notificationService.sendEmailWithAttachment(user);
-		} catch (MailException mailException) {
-			System.out.println(mailException);
-		}
-		return "Congratulations! Your mail has been send to the user.";
-	}
 }

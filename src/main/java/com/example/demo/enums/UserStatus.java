@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public enum UserStatus {
     NEW("Новый"),
-    CONFIRM("Подтвержденный"),
+    ACTIVE("Подтвержденный"),
     BLOCKED("Заблокирован")
     ;
 

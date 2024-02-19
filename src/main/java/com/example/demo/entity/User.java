@@ -3,13 +3,16 @@ package com.example.demo.entity;
 
 import com.example.demo.enums.UserStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "users")
+@NoArgsConstructor
 @Data
 public class User {
     @Id
@@ -18,8 +21,12 @@ public class User {
 
     @Column(unique = true)
     private  String username;
+
+    @Column(nullable = false)
     private  String password;
     private  String fullname;
+
+    @Email
     private  String emailAddress;
 
     @Enumerated(value = EnumType.STRING)
@@ -33,4 +40,7 @@ public class User {
     @JoinColumn(name = "user_id")
     private List<Role> roles = new ArrayList<>();
 
+    public User(Long id) {
+        this.id = id;
+    }
 }

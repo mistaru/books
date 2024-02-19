@@ -11,11 +11,13 @@ import com.example.demo.service.MailService;
 import com.example.demo.service.RoleService;
 import com.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,10 +28,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Long save(UserRegistrationDto model) {
+        log.info("UserServiceImpl: save() - {}", model);
         User newUser = new User();
 
-        if (model.getPassword() == null || model.getPassword().isEmpty())
+        if (model.getPassword() == null || model.getPassword().isEmpty()) {
+            log.error("UserServiceImpl: save() - {}", "\"Пароль не подходит требованиям безопасности\"");
             throw new NullPointerException("Пароль не подходит требованиям безопасности");
+        }
 
         if (repo.findByEmailAddress(model.getEmailAddress()).isPresent())
             throw new RuntimeException(model.getEmailAddress() + " -  электронная почта уже используется другим пользователем");
@@ -57,6 +62,22 @@ public class UserServiceImpl implements UserService {
 
         mailService.sendEmailForRegistration(newUser);
 
-        return  repo.save(newUser).getId();
+        newUser = repo.save(newUser);
+        log.info("UserServiceImpl: end() - id new user {}", newUser.getId());
+
+        return  newUser.getId();
+    }
+
+    @Override
+    public void activeUser(Long id) {
+        var optionalUser = repo.findById(id);
+
+        if (optionalUser.isPresent()) {
+            var user = optionalUser.get();
+            user.setStatus(UserStatus.ACTIVE);
+            repo.save(user);
+
+        } else throw new NullPointerException("Пользователь не найден");
+
     }
 }
