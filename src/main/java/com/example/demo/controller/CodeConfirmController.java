@@ -18,7 +18,8 @@ public class CodeConfirmController {
 
 	@PostMapping()
 	public Long confirm(@RequestParam Long code){
-		return service.confirm(code);
+//		return service.confirm(code);
+		return 1L;
 	}
 
 }

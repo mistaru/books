@@ -26,7 +26,7 @@ public class MailServiceImpl implements MailService {
                 codeConfirmService.save(user.getId()) + "). Не показывайте никому. ");
 
         javaMailSender.send(mail);
-        log.info("MailServiceImpl : " +
+        log.error("MailServiceImpl : " +
                 "sendEmailForRegistration() " +
                 "отправили сообщение на почту {}", user.getEmailAddress()
         );
