@@ -1,5 +1,12 @@
 package com.example.demo.generics;
 
+import com.example.demo.compare.HumanAgeComparator;
+import com.example.demo.compare.HumanNameComparator;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 class Greatest {
     public static <T extends Comparable<T>> T greatest(T x, T y, T z) {
         T max = x; //Пока что, Х максимальное
@@ -24,19 +31,46 @@ class Greatest {
     }
 
     public static void main(String[] args) {
-        System.out.printf("Крупнейшее из %d, %d и %d это %d",
-                3, 4, 5, greatest(3L, 4L, 5L));
-        System.out.printf("\n\nКрупнейшее из %.1f, %.1f и %.1f это %.1f",
-                3.3, 3.3, 5.5, greatest(3.3, 4.4, 5.5));
-        System.out.printf("\n\nКрупнейшее из %s, %s и %s это %s",
-                "шапка", "куртка", "туфли",
-                greatest("шапка", "куртка", "туфли"));
-        System.out.println();
+        HumanAgeComparator comparatorAge = new HumanAgeComparator();
+        HumanNameComparator comparatorName = new HumanNameComparator();
 
-        Human h = new Human();
-        Human h1 = new Human();
-        Human h2 = new Human();
+        Human2 h = new Human2(18, 180, "A");
+        Human2 h1 = new Human2(20, 170, "B");
+        Human2 h2 = new Human2(19, 185, "c");
 
-        System.out.println(greatestArray(new Integer[] {1, 23,412,1231}));
+        List<Human2>  humanList = new ArrayList<>();
+        humanList.add(h2);
+        humanList.add(h1);
+        humanList.add(h);
+
+        for (Human2 human2: humanList) {
+            System.out.println(human2.toString());
+        }
+
+        humanList.sort(comparatorName);
+        System.out.println("-----------------------");
+        for (Human2 human: humanList) {
+            System.out.println(human.toString());
+
+
+/*        Human h = new Human(18, 180, "A");
+        Human h1 = new Human(20, 170, "B");
+        Human h2 = new Human(19, 185, "c");
+
+        List<Human>  humanList = new ArrayList<>();
+        humanList.add(h);
+        humanList.add(h1);
+        humanList.add(h2);
+
+        for (Human human: humanList) {
+            System.out.println(human.toString());
+        }
+
+        Collections.sort(humanList);
+        System.out.println("-----------------------");
+        for (Human human: humanList) {
+            System.out.println(human.toString());
+        }*/
+    }
     }
 }

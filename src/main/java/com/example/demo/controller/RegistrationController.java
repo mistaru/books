@@ -47,7 +47,7 @@ public class RegistrationController {
 		 * Here we will call sendEmail() for Sending mail to the sender.
 		 */
 		try {
-			notificationService.sendEmailForRegistration(user);
+			notificationService.sendEmailForRegistration(user, 9999L);
 		} catch (MailException mailException) {
 			System.out.println(mailException);
 		}

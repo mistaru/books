@@ -17,7 +17,6 @@ import java.util.Random;
 public class CodeConfirmServiceImpl implements CodeConfirmService {
 
     private final CodeConfirmRepo repo;
-    private final UserService userService;
 
     @Override
     public Optional<CodeConfirm> findByCode(Long code) {
@@ -40,18 +39,19 @@ public class CodeConfirmServiceImpl implements CodeConfirmService {
     }
 
     @Override
-    public void confirm(Long code) {
+    public Boolean confirm(Long code) {
         var optionalCode  = findByCode(code);
 
         if (optionalCode.isPresent()) {
             var codeEntity = optionalCode.get();
             if (codeEntity.getStatus() == CodeStatus.NEW) {
                 codeEntity.setStatus(CodeStatus.USED);
-                userService.activeUser(codeEntity.getUser().getId());
-            } else  throw new NullPointerException("Код не найден");
-        } else throw new NullPointerException("Код не найден");
-
+                return true;
+            } return false;
+        }
+        return false;
     }
+
 
 
     private static long generateFourDigitNumber() {

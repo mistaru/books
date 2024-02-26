@@ -9,19 +9,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class Human implements Comparable<Human>{
+public class Human2 {
     private Integer age;
     private Integer height;
     private String name;
-
-    @Override
-    public int compareTo(Human other) {
-        int age =  Integer.compare(getAge(), other.getAge());
-
-        if(age == 0)
-            return getName().compareTo(other.getName());
-
-
-        return age;
-    }
 }

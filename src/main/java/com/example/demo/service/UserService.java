@@ -5,5 +5,5 @@ import com.example.demo.dto.UserRegistrationDto;
 public interface UserService {
     Long save(UserRegistrationDto model);
 
-    void activeUser(Long id);
+    void activeUser(Long code);
 }

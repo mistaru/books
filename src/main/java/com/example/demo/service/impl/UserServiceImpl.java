@@ -6,10 +6,7 @@ import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
 import com.example.demo.enums.UserStatus;
 import com.example.demo.repo.UserRepo;
-import com.example.demo.service.AddressService;
-import com.example.demo.service.MailService;
-import com.example.demo.service.RoleService;
-import com.example.demo.service.UserService;
+import com.example.demo.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +21,7 @@ public class UserServiceImpl implements UserService {
     private final AddressService addressService;
     private final RoleService roleService;
     private final MailService mailService;
+    private final CodeConfirmService codeConfirmService;
     private final UserRepo repo;
 
     @Override
@@ -44,7 +42,7 @@ public class UserServiceImpl implements UserService {
         newUser.setEmailAddress(model.getEmailAddress());
         newUser.setPassword(model.getPassword());
 
-        List<Role> roles  = new ArrayList<>();
+        List<Role> roles = new ArrayList<>();
 
         roles.add(roleService.findByName("reader"));
         newUser.setRoles(roles);
@@ -60,21 +58,26 @@ public class UserServiceImpl implements UserService {
         newUser.setAddress(address);
         newUser.setStatus(UserStatus.NEW);
 
-        mailService.sendEmailForRegistration(newUser);
 
         newUser = repo.save(newUser);
         log.info("UserServiceImpl: end() - id new user {}", newUser.getId());
 
-        return  newUser.getId();
+        var code = codeConfirmService.save(newUser.getId());
+
+        mailService.sendEmailForRegistration(newUser, code);
+
+        return newUser.getId();
     }
 
     @Override
-    public void activeUser(Long id) {
-        var optionalUser = repo.findById(id);
+    public void activeUser(Long code) {
+        var confirmCodeOptional = codeConfirmService.findByCode(code);
 
-        if (optionalUser.isPresent()) {
-            var user = optionalUser.get();
-            user.setStatus(UserStatus.ACTIVE);
+
+        if (confirmCodeOptional.isPresent()) {
+            User user = confirmCodeOptional.get().getUser();
+            codeConfirmService.confirm(code);
+            user.setStatus(UserStatus.CONFIRM);
             repo.save(user);
 
         } else throw new NullPointerException("Пользователь не найден");

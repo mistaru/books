@@ -1,7 +1,6 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.User;
-import com.example.demo.service.CodeConfirmService;
 import com.example.demo.service.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,15 +14,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class MailServiceImpl implements MailService {
     private final JavaMailSender javaMailSender;
-    private final CodeConfirmService codeConfirmService;
 
-    public void sendEmailForRegistration(User user) throws MailException {
+    public void sendEmailForRegistration(User user, Long code) throws MailException {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(user.getEmailAddress());
         mail.setSubject("Регистрация на BOOK-STORE");
 
         mail.setText("Код для активации аккаунта ( " +
-                codeConfirmService.save(user.getId()) + "). Не показывайте никому. ");
+                code + "). Не показывайте никому. ");
 
         javaMailSender.send(mail);
         log.error("MailServiceImpl : " +

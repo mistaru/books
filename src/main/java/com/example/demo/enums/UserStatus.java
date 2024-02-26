@@ -11,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 public enum UserStatus {
     NEW("Новый"),
     ACTIVE("Подтвержденный"),
+    CONFIRM("Подтвержденный"),
     BLOCKED("Заблокирован")
     ;
 

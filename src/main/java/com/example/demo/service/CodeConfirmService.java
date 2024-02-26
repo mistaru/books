@@ -13,5 +13,5 @@ public interface CodeConfirmService {
 
     Long save(Long userId);
 
-    void confirm(Long code);
+    Boolean confirm(Long code);
 }
