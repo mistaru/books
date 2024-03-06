@@ -1,5 +1,11 @@
 package com.example.demo.laymbda;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+
 public class Main {
     static  int nb = 4;
     public static void main(String[] args) {
@@ -18,6 +24,14 @@ public class Main {
 
 
         System.out.println(anotherInterfaceLyambda.example("Argen", 27));
+
+        String[] arrayOfStr = {"Alex", "Sam"};
+        var asd = Stream.of(arrayOfStr);
+        var as = Stream.of(1, 2, 3);
+
+        as.forEach(x -> System.out.println(x * x));
+        List<String> list = Arrays.asList(arrayOfStr);
+
     }
 
 }
