@@ -3,8 +3,9 @@ package com.example.demo.threds2;
 class Counter3 {
     private int count = 0;
 
-    public void increment() {
-        count++;
+    public void increment(String name) {
+        int i = count++;
+        System.out.println(name + ": " + i);
     }
 
     public int getCount() {
@@ -18,14 +19,12 @@ public class SynchronizedBlockExample {
 
         Runnable task = () -> {
             for (int i = 0; i < 1000; i++) {
-                // Блок синхронизации для обеспечения безопасности доступа к счетчику
                 synchronized (counter) {
-                    counter.increment();
+                    counter.increment("1");
                 }
             }
         };
 
-        // Создаем и запускаем несколько потоков
         Thread thread1 = new Thread(task);
         Thread thread2 = new Thread(task);
 

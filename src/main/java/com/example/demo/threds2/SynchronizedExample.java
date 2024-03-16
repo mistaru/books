@@ -6,7 +6,6 @@ class Counter {
     public synchronized void increment(String name) {
         int i = count++;
         System.out.println(name + ": " + i);
-
     }
 
     public synchronized int getCount() {
@@ -19,17 +18,19 @@ public class SynchronizedExample {
         Counter counter = new Counter();
 
         Thread thread1 = new Thread(() -> {
-            for (int i = 0; i < 1000; i++) {
+            for (int i = 0; i < 100; i++) {
                 counter.increment("thread 1");
             }
         });
 
         Thread thread2 = new Thread(() -> {
-            for (int i = 0; i < 1000; i++) {
+            for (int i = 0; i < 100; i++) {
                 counter.increment("thread 2");
             }
         });
 
+        thread1.setPriority(1);
+        thread2.setPriority(10);
         thread1.start();
         thread2.start();
 

@@ -19,16 +19,15 @@ public class NonSynchronizedExample {
 
         Thread thread1 = new Thread(() -> {
             for (int i = 0; i < 1000; i++) {
-                counter.increment();
+                counter.increment("1");
             }
         });
 
         Thread thread2 = new Thread(() -> {
             for (int i = 0; i < 1000; i++) {
-                counter.increment();
+                counter.increment("2");
             }
         });
-        synchronized ()
 
         thread1.start();
         thread2.start();
