@@ -6,10 +6,7 @@ import com.example.demo.dto.Response;
 import com.example.demo.dto.ResponseList;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -34,7 +31,8 @@ class MyController {
 
     @GetMapping("/employee/{id}")
     public Response<Employee> getEmployeeById(@PathVariable Long id) throws JsonProcessingException {
-        String apiUrl = "https://dummy.restapiexample.com/api/v1/employee/1";
+        String apiUrl = "https://dummy.restapiexample.com/api/v1/employee/" + id;
+
         String jsonEmployee =  restTemplate.getForObject(apiUrl, String.class);
 
         ObjectMapper mapper = new ObjectMapper();
@@ -44,7 +42,7 @@ class MyController {
     }
 
     @PostMapping("/create")
-    public String createEmployee(@RequestBody String requestBody) {
+    public Response<Employee> createEmployee(@RequestBody String requestBody) throws JsonProcessingException {
         String apiUrl = "https://dummy.restapiexample.com/api/v1/create";
 
         HttpHeaders headers = new HttpHeaders();
@@ -52,7 +50,11 @@ class MyController {
 
         HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
 
-        return restTemplate.exchange(apiUrl, HttpMethod.POST, request, String.class).getBody();
+        String json = restTemplate.exchange(apiUrl, HttpMethod.POST, request, String.class).getBody();
+
+        ObjectMapper mapper = new ObjectMapper();
+        Response<Employee> employee = mapper.readValue(json, Response.class);
+        return employee;
     }
 }
 
