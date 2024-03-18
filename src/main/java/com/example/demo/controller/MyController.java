@@ -56,5 +56,37 @@ class MyController {
         Response<Employee> employee = mapper.readValue(json, Response.class);
         return employee;
     }
+
+    @PostMapping("/update/{id}")
+    public Response<Employee> updateEmployee(@PathVariable Long id, @RequestBody String requestBody) throws JsonProcessingException {
+        String apiUrl = "https://dummy.restapiexample.com/api/v1/update/" + id;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
+
+        String json = restTemplate.exchange(apiUrl, HttpMethod.PUT, request, String.class).getBody();
+
+        ObjectMapper mapper = new ObjectMapper();
+        Response<Employee> employee = mapper.readValue(json, Response.class);
+        return employee;
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteById(@PathVariable Long id) throws JsonProcessingException {
+        String apiUrl = "https://dummy.restapiexample.com/api/v1/delete/" + id;
+
+        String jsonEmployee = "";
+        try {
+            jsonEmployee =  restTemplate.getForObject(apiUrl, String.class);
+            System.out.println(jsonEmployee);
+        } catch (Exception e ) {
+
+            e.getMessage();
+        }
+
+        return jsonEmployee;
+    }
 }
 
