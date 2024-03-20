@@ -54,9 +54,10 @@ public class CodeConfirmServiceImpl implements CodeConfirmService {
 
 
 
-    private static long generateFourDigitNumber() {
+    public static long generateFourDigitNumber() {
         Random random = new Random();
-        // Генерируем случайное число от 1000 до 9999 (включительно)
+
+        // Генерируем случайное число от 1000 до 9999 (включительно) 0001 0012
         return random.nextLong(9000) + 1000;
     }
 
