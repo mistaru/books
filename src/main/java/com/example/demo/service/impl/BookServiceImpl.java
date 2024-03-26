@@ -71,7 +71,6 @@ public class BookServiceImpl implements BookService {
 }
 
     public List<BookResponseDto> findAll() throws Exception {
-        if (true) throw new Exception("что то пошло не - так");
         var list = repo.findAllAndBOrderByRemoveDateIsNull();
 
 

@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 
 import com.example.demo.enums.UserStatus;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
